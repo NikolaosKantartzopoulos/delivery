@@ -53,6 +53,8 @@ dependencies {
     // ***** Utility *****
     // Metrics
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus' // Prometheus metrics exporter
+    // Docker
+    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 
     // ***** Test *****
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2' // Testing framework

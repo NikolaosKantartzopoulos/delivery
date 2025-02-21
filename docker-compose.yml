@@ -1,0 +1,20 @@
+services:
+  postgres-db:
+    image: postgres
+    container_name: postgres-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=delivery
+    volumes:
+      - deliveryPSQL:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+
+volumes:
+  deliveryPSQL:
