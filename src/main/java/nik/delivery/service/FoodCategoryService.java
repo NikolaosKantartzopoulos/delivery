@@ -15,12 +15,10 @@ import nik.delivery.repository.FoodCategoryRepository;
 public class FoodCategoryService {
 
     private final FoodCategoryRepository foodCategoryRepository;
-    private final ConversionService conversionService;
     private final ModelMapper modelMapper;
 
-    public FoodCategoryService(FoodCategoryRepository foodCategoryRepository, ConversionService conversionService, ModelMapper modelMapper) {
+    public FoodCategoryService(FoodCategoryRepository foodCategoryRepository, ModelMapper modelMapper) {
         this.foodCategoryRepository = foodCategoryRepository;
-        this.conversionService = conversionService;
         this.modelMapper = modelMapper;
     }
 
