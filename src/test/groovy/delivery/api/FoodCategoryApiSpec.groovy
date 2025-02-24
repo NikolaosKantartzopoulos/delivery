@@ -1,7 +1,6 @@
 package delivery.api
 
 import nik.delivery.api.FoodCategoryApi
-import nik.delivery.api.FoodCategoryRestApi
 import nik.delivery.dto.CreateFoodCategoryRequestDto
 import nik.delivery.service.FoodCategoryService
 import spock.lang.Specification
