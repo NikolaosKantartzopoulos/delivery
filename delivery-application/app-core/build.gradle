@@ -1,0 +1,85 @@
+plugins {
+    id 'java'
+    id 'groovy'
+    id 'org.springframework.boot' version '3.4.3'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.springdoc.openapi-gradle-plugin' version '1.9.0'
+    id 'checkstyle'
+    id 'codenarc'
+}
+
+group = 'nik'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // ***** Spring *****
+    // Core
+    developmentOnly 'org.springframework.boot:spring-boot-devtools' // Hot reload for development
+    implementation 'jakarta.validation:jakarta.validation-api:3.1.0' // Validation API
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0' // OpenAPI documentation UI
+    implementation 'org.springframework.boot:spring-boot-starter-freemarker' // HTML template engine
+    implementation 'org.springframework.boot:spring-boot-starter-web' // Spring Web framework
+    // Validation
+    implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final' // Hibernate validator for Jakarta Validation
+    // Converters
+    implementation 'org.modelmapper:modelmapper:3.2.2' // Object mapping utility
+    // Other Tools
+    implementation 'org.springframework.boot:spring-boot-starter-actuator' // Application monitoring and metrics
+    annotationProcessor 'org.projectlombok:lombok' // Annotation processor for Lombok
+    compileOnly 'org.projectlombok:lombok' // Lombok for reducing boilerplate code
+
+    // ***** Database *****
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc' // Database connectivity with JDBC
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // ORM for relational databases
+    runtimeOnly 'org.postgresql:postgresql' // Postgres database driver
+    // Database history
+    implementation 'org.flywaydb:flyway-core' // Database migration tool
+    implementation 'org.flywaydb:flyway-database-postgresql' // Postgres Flyway support
+
+    // ***** Utility *****
+    // Metrics
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus' // Prometheus metrics exporter
+    // Docker
+    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+
+    // ***** Test *****
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2' // Testing framework
+    testImplementation 'org.springframework.boot:spring-boot-starter-test' // Spring Boot testing utilities
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // JUnit Platform launcher
+    // Groovy
+    testImplementation 'org.spockframework:spock-core:2.4-M1-groovy-4.0' // Spock testing framework for Groovy
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+codenarc {
+    configFile = rootProject.file("config/codenarc/codenarc.groovy")
+    maxPriority1Violations = 0
+    maxPriority2Violations = 0
+    maxPriority3Violations = 0
+}
+
+
+println("BUILD SCRIPT: This is executed during the configuration phase")
+
+springBoot {
+    mainClass = 'nik.delivery.DeliveryApplication'
+}

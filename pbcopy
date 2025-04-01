@@ -1,0 +1,159 @@
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	renamed:    src/main/java/nik/delivery/DeliveryApplication.java -> delivery-application/app-core/src/main/java/nik/delivery/DeliveryApplication.java
+	renamed:    src/main/java/nik/delivery/api/FoodCategoryApi.java -> delivery-application/app-core/src/main/java/nik/delivery/api/FoodCategoryApi.java
+	renamed:    src/main/java/nik/delivery/api/FoodCategoryRestApi.java -> delivery-application/app-core/src/main/java/nik/delivery/api/FoodCategoryRestApi.java
+	renamed:    src/main/java/nik/delivery/config/ModelMapperConfig.java -> delivery-application/app-core/src/main/java/nik/delivery/config/ModelMapperConfig.java
+	renamed:    src/main/java/nik/delivery/domain/FoodCategory.java -> delivery-application/app-core/src/main/java/nik/delivery/domain/FoodCategory.java
+	renamed:    src/main/java/nik/delivery/dto/CreateFoodCategoryRequestDto.java -> delivery-application/app-core/src/main/java/nik/delivery/dto/CreateFoodCategoryRequestDto.java
+	renamed:    src/main/java/nik/delivery/dto/CreateFoodCategoryResponseDto.java -> delivery-application/app-core/src/main/java/nik/delivery/dto/CreateFoodCategoryResponseDto.java
+	renamed:    src/main/java/nik/delivery/repository/FoodCategoryRepository.java -> delivery-application/app-core/src/main/java/nik/delivery/repository/FoodCategoryRepository.java
+	renamed:    src/main/java/nik/delivery/service/FoodCategoryService.java -> delivery-application/app-core/src/main/java/nik/delivery/service/FoodCategoryService.java
+	renamed:    src/main/java/nik/delivery/web/HomepageController.java -> delivery-application/app-core/src/main/java/nik/delivery/web/HomepageController.java
+	renamed:    src/main/java/nik/delivery/web/config/WebConfig.java -> delivery-application/app-core/src/main/java/nik/delivery/web/config/WebConfig.java
+	renamed:    src/main/resources/application.properties -> delivery-application/app-core/src/main/resources/application.properties
+	renamed:    src/main/resources/db.migration/V1__create_schema.sql -> delivery-application/app-core/src/main/resources/db.migration/V1__create_schema.sql
+	renamed:    src/main/resources/db.migration/V2__create_table_food_category.sql -> delivery-application/app-core/src/main/resources/db.migration/V2__create_table_food_category.sql
+	renamed:    src/main/resources/templates/home.ftl -> delivery-application/app-core/src/main/resources/templates/home.ftl
+	renamed:    src/test/groovy/delivery/api/FoodCategoryApiSpec.groovy -> delivery-application/app-core/src/test/groovy/delivery/api/FoodCategoryApiSpec.groovy
+	renamed:    src/test/groovy/delivery/api/FoodCategoryRestApiSpec.groovy -> delivery-application/app-core/src/test/groovy/delivery/api/FoodCategoryRestApiSpec.groovy
+	renamed:    src/test/groovy/delivery/service/FoodCategoryServiceSpec.groovy -> delivery-application/app-core/src/test/groovy/delivery/service/FoodCategoryServiceSpec.groovy
+	renamed:    src/test/java/nik/delivery/DeliveryApplicationTests.java -> delivery-application/app-core/src/test/java/nik/delivery/DeliveryApplicationTests.java
+
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   build.gradle
+	modified:   delivery-application/app-core/src/main/resources/application.properties
+	modified:   settings.gradle
+	deleted:    src/.DS_Store
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	delivery-application/app-core/build.gradle
+	delivery-application/app-core/src/.DS_Store
+	delivery-application/build.gradle
+
+diff --git a/build.gradle b/build.gradle
+index a0f324e..e69de29 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -1,78 +0,0 @@
+-plugins {
+-    id 'java'
+-    id 'groovy'
+-    id 'org.springframework.boot' version '3.4.3'
+-    id 'io.spring.dependency-management' version '1.1.7'
+-    id 'org.springdoc.openapi-gradle-plugin' version '1.9.0'
+-    id 'checkstyle'
+-    id 'codenarc'
+-}
+-
+-group = 'nik'
+-version = '0.0.1-SNAPSHOT'
+-
+-java {
+-    toolchain {
+-        languageVersion = JavaLanguageVersion.of(21)
+-    }
+-}
+-
+-configurations {
+-    compileOnly {
+-        extendsFrom annotationProcessor
+-    }
+-}
+-
+-repositories {
+-    mavenCentral()
+-}
+-
+-dependencies {
+-    // ***** Spring *****
+-    // Core
+-    developmentOnly 'org.springframework.boot:spring-boot-devtools' // Hot reload for development
+-    implementation 'jakarta.validation:jakarta.validation-api:3.1.0' // Validation API
+-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0' // OpenAPI documentation UI
+-    implementation 'org.springframework.boot:spring-boot-starter-freemarker' // HTML template engine
+-    implementation 'org.springframework.boot:spring-boot-starter-web' // Spring Web framework
+-    // Validation
+-    implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final' // Hibernate validator for Jakarta Validation
+-    // Converters
+-    implementation 'org.modelmapper:modelmapper:3.2.2' // Object mapping utility
+-    // Other Tools
+-    implementation 'org.springframework.boot:spring-boot-starter-actuator' // Application monitoring and metrics
+-    annotationProcessor 'org.projectlombok:lombok' // Annotation processor for Lombok
+-    compileOnly 'org.projectlombok:lombok' // Lombok for reducing boilerplate code
+-
+-    // ***** Database *****
+-    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc' // Database connectivity with JDBC
+-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // ORM for relational databases
+-    runtimeOnly 'org.postgresql:postgresql' // Postgres database driver
+-    // Database history
+-    implementation 'org.flywaydb:flyway-core' // Database migration tool
+-    implementation 'org.flywaydb:flyway-database-postgresql' // Postgres Flyway support
+-
+-    // ***** Utility *****
+-    // Metrics
+-    runtimeOnly 'io.micrometer:micrometer-registry-prometheus' // Prometheus metrics exporter
+-    // Docker
+-    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+-
+-    // ***** Test *****
+-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2' // Testing framework
+-    testImplementation 'org.springframework.boot:spring-boot-starter-test' // Spring Boot testing utilities
+-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // JUnit Platform launcher
+-    // Groovy
+-    testImplementation 'org.spockframework:spock-core:2.4-M1-groovy-4.0' // Spock testing framework for Groovy
+-}
+-
+-tasks.named('test') {
+-    useJUnitPlatform()
+-}
+-
+-codenarc {
+-    configFile = rootProject.file("config/codenarc/codenarc.groovy")
+-    maxPriority1Violations = 0
+-    maxPriority2Violations = 0
+-    maxPriority3Violations = 0
+-}
+diff --git a/delivery-application/app-core/src/main/resources/application.properties b/delivery-application/app-core/src/main/resources/application.properties
+index cc61770..1da1d08 100644
+--- a/delivery-application/app-core/src/main/resources/application.properties
++++ b/delivery-application/app-core/src/main/resources/application.properties
+@@ -33,4 +33,10 @@ springdoc.swagger-ui.path=/swagger-ui.html
+ # = Environment properties
+ # ===============================
+ 
+-env.company-name=Sample company name
+\ No newline at end of file
++env.company-name=Sample company name
++
++# ===============================
++# = Docker
++# ===============================
++
++spring.docker.compose.enabled=false
+diff --git a/settings.gradle b/settings.gradle
+index 6a6c7ab..e017262 100644
+--- a/settings.gradle
++++ b/settings.gradle
+@@ -1 +1,11 @@
++pluginManagement {
++    repositories {
++        gradlePluginPortal()
++    }
++}
++
+ rootProject.name = 'delivery'
++
++include 'delivery-application:app-core'
++
++println('SETTINGS FILE: This is executed during the initialization phase')
+diff --git a/src/.DS_Store b/src/.DS_Store
+deleted file mode 100644
+index 34352a4..0000000
+Binary files a/src/.DS_Store and /dev/null differ
