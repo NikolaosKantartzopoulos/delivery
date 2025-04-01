@@ -6,7 +6,7 @@ import spock.lang.Specification
 class FoodCategoryRestApiSpec extends Specification {
 
     FoodCategoryRestApi foodCategoryRestApi
-    FoodCategoryApi foodCategoryApi = Mock()
+    FoodCategoryApiImpl foodCategoryApi = Mock()
 
     def setup() {
         foodCategoryRestApi = new FoodCategoryRestApi(foodCategoryApi)
