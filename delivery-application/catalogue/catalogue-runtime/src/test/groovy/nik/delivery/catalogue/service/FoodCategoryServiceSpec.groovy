@@ -1,13 +1,12 @@
-package delivery.service
+package nik.delivery.catalogue.service
 
 import org.modelmapper.ModelMapper
 import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
 
-import nik.delivery.domain.FoodCategory
-import nik.delivery.dto.CreateFoodCategoryRequestDto
-import nik.delivery.repository.FoodCategoryRepository
-import nik.delivery.service.FoodCategoryService
+import nik.delivery.catalogue.domain.FoodCategory
+import nik.delivery.catalogue.dto.CreateFoodCategoryRequestDto
+import nik.delivery.catalogue.repository.FoodCategoryRepository
 import spock.lang.Specification
 
 class FoodCategoryServiceSpec extends Specification {

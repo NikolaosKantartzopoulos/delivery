@@ -1,11 +1,11 @@
-package nik.delivery.repository;
+package nik.delivery.catalogue.repository;
 
 import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import nik.delivery.domain.FoodCategory;
+import nik.delivery.catalogue.domain.FoodCategory;
 
 @Repository
 public interface FoodCategoryRepository extends CrudRepository<FoodCategory, Long> {

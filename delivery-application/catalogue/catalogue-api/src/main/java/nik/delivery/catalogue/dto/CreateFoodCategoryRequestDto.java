@@ -1,4 +1,4 @@
-package nik.delivery.dto;
+package nik.delivery.catalogue.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

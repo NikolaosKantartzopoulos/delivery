@@ -1,4 +1,4 @@
-package nik.delivery.dto;
+package nik.delivery.catalogue.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

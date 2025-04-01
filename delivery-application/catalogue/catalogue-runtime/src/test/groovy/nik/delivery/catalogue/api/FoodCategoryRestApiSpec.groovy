@@ -1,8 +1,6 @@
-package delivery.api
+package nik.delivery.catalogue.api
 
-import nik.delivery.api.FoodCategoryApi
-import nik.delivery.api.FoodCategoryRestApi
-import nik.delivery.dto.CreateFoodCategoryRequestDto
+import nik.delivery.catalogue.dto.CreateFoodCategoryRequestDto
 import spock.lang.Specification
 
 class FoodCategoryRestApiSpec extends Specification {
@@ -14,7 +12,7 @@ class FoodCategoryRestApiSpec extends Specification {
         foodCategoryRestApi = new FoodCategoryRestApi(foodCategoryApi)
     }
 
-    def "Should delegate createFoodCategory to api layer"() {
+    def "Should delegate createFoodCategory to nik.delivery.api layer"() {
         given:
             def displayName = "A display dame"
             CreateFoodCategoryRequestDto requestDto = new CreateFoodCategoryRequestDto(displayName: displayName)

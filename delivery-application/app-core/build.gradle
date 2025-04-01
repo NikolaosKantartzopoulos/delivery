@@ -64,6 +64,9 @@ dependencies {
 
     // Local Gradle Projects
     implementation project (':delivery-application:infra-database')
+    implementation project (':delivery-application:catalogue:catalogue-api')
+    runtimeOnly project (':delivery-application:catalogue:catalogue-runtime')
+
 }
 
 tasks.named('test') {

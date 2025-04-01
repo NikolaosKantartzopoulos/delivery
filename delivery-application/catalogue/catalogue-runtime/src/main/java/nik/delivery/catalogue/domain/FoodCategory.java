@@ -1,4 +1,4 @@
-package nik.delivery.domain;
+package nik.delivery.catalogue.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

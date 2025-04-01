@@ -1,8 +1,7 @@
-package delivery.api
+package nik.delivery.catalogue.api
 
-import nik.delivery.api.FoodCategoryApi
-import nik.delivery.dto.CreateFoodCategoryRequestDto
-import nik.delivery.service.FoodCategoryService
+import nik.delivery.catalogue.dto.CreateFoodCategoryRequestDto
+import nik.delivery.catalogue.service.FoodCategoryService
 import spock.lang.Specification
 
 class FoodCategoryApiSpec extends Specification {
@@ -11,7 +10,7 @@ class FoodCategoryApiSpec extends Specification {
     FoodCategoryService foodCategoryService = Mock()
 
     def setup() {
-        foodCategoryApi = new FoodCategoryApi(foodCategoryService)
+        foodCategoryApi = new FoodCategoryApiImpl(foodCategoryService)
     }
 
     def "Should delegate createFoodCategory to service layer"() {

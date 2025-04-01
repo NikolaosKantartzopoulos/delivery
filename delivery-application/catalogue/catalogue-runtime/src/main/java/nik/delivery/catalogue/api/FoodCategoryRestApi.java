@@ -1,4 +1,4 @@
-package nik.delivery.api;
+package nik.delivery.catalogue.api;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ProblemDetail;
@@ -12,17 +12,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import nik.delivery.dto.CreateFoodCategoryRequestDto;
-import nik.delivery.dto.CreateFoodCategoryResponseDto;
+import nik.delivery.catalogue.dto.CreateFoodCategoryRequestDto;
+import nik.delivery.catalogue.dto.CreateFoodCategoryResponseDto;
 
 @RestController()
 @RequestMapping("/api/food-category")
 public class FoodCategoryRestApi {
 
-    private final FoodCategoryApi foodCategoryApi;
+    private final FoodCategoryApiImpl foodCategoryApiImpl;
 
-    public FoodCategoryRestApi(FoodCategoryApi foodCategoryApi) {
-        this.foodCategoryApi = foodCategoryApi;
+    public FoodCategoryRestApi(FoodCategoryApiImpl foodCategoryApiImpl) {
+        this.foodCategoryApiImpl = foodCategoryApiImpl;
     }
 
     @PostMapping()
@@ -38,7 +38,7 @@ public class FoodCategoryRestApi {
     public CreateFoodCategoryResponseDto createFoodCategory(
         @Valid @RequestBody CreateFoodCategoryRequestDto requestDto
     ) {
-        return foodCategoryApi.createFoodCategory(requestDto);
+        return foodCategoryApiImpl.createFoodCategory(requestDto);
     }
 
 }
