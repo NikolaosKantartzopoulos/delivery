@@ -1,0 +1,418 @@
+diff --git a/build.gradle b/build.gradle
+index 273577c..9c20182 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -1,11 +1,5 @@
+-subprojects {
+-    apply plugin: 'groovy'
+-    apply plugin: 'codenarc'
+-
+-    codenarc {
+-        configFile = rootProject.file('config/codenarc/codenarc.groovy')
+-        maxPriority1Violations = 0
+-        maxPriority2Violations = 0
+-        maxPriority3Violations = 0
+-    }
++plugins {
++    alias libs.plugins.spring.dependency.management apply false
++    alias libs.plugins.spring.boot apply false
++    alias libs.plugins.spring.openapi.plugin apply false
+ }
+diff --git a/buildSrc/build.gradle b/buildSrc/build.gradle
+new file mode 100644
+index 0000000..b4159f8
+--- /dev/null
++++ b/buildSrc/build.gradle
+@@ -0,0 +1,9 @@
++plugins {
++    id 'groovy-gradle-plugin'
++}
++
++repositories {
++    gradlePluginPortal()
++    mavenCentral()
++}
++
+diff --git a/buildSrc/settings.gradle b/buildSrc/settings.gradle
+new file mode 100644
+index 0000000..6f31e6e
+--- /dev/null
++++ b/buildSrc/settings.gradle
+@@ -0,0 +1,7 @@
++dependencyResolutionManagement {
++    versionCatalogs {
++        libs {
++            from(files("../gradle/libs.versions.toml"))
++        }
++    }
++}
+diff --git a/buildSrc/src/main/groovy/MyCustomTask.groovy b/buildSrc/src/main/groovy/MyCustomTask.groovy
+new file mode 100644
+index 0000000..d7bd1b3
+--- /dev/null
++++ b/buildSrc/src/main/groovy/MyCustomTask.groovy
+@@ -0,0 +1,18 @@
++
++
++import org.gradle.api.DefaultTask
++import org.gradle.api.tasks.TaskAction
++
++class MyCustomTask extends DefaultTask {
++    @TaskAction
++    void calculateSum() {
++        // Custom logic to calculate the sum of two numbers
++        int num1 = 5
++        int num2 = 7
++        int sum = num1 + num2
++
++        // Print the result
++        println "Sum: $sum"
++    }
++}
++
+diff --git a/buildSrc/src/main/groovy/delivery.java-conventions.gradle b/buildSrc/src/main/groovy/delivery.java-conventions.gradle
+new file mode 100644
+index 0000000..a49a974
+--- /dev/null
++++ b/buildSrc/src/main/groovy/delivery.java-conventions.gradle
+@@ -0,0 +1,32 @@
++plugins {
++    id 'java'
++    id 'groovy'
++    id 'checkstyle'
++    id 'codenarc'
++    id 'org.springframework.boot'
++}
++
++group = 'nik'
++version = '0.0.1-SNAPSHOT'
++
++java {
++    toolchain {
++        languageVersion = JavaLanguageVersion.of(21)
++        vendor = JvmVendorSpec.BELLSOFT
++    }
++}
++
++codenarc {
++    configFile = rootProject.file('config/codenarc/codenarc.groovy')
++    maxPriority1Violations = 0
++    maxPriority2Violations = 0
++    maxPriority3Violations = 0
++}
++
++
++
++configurations {
++    compileOnly {
++        extendsFrom annotationProcessor
++    }
++}
+diff --git a/delivery-application/app-core/build.gradle b/delivery-application/app-core/build.gradle
+index f0eced2..ff40dd9 100644
+--- a/delivery-application/app-core/build.gradle
++++ b/delivery-application/app-core/build.gradle
+@@ -1,26 +1,5 @@
+ plugins {
+-    id 'java'
+-    id 'groovy'
+-    id 'org.springframework.boot' version '3.4.3'
+-    id 'io.spring.dependency-management' version '1.1.7'
+-    id 'org.springdoc.openapi-gradle-plugin' version '1.9.0'
+-    id 'checkstyle'
+-    id 'codenarc'
+-}
+-
+-group = 'nik'
+-version = '0.0.1-SNAPSHOT'
+-
+-java {
+-    toolchain {
+-        languageVersion = JavaLanguageVersion.of(21)
+-    }
+-}
+-
+-configurations {
+-    compileOnly {
+-        extendsFrom annotationProcessor
+-    }
++    id 'delivery.java-conventions'
+ }
+ 
+ repositories {
+@@ -29,44 +8,35 @@ repositories {
+ 
+ dependencies {
+     // ***** Spring *****
+-    // Core
+-    developmentOnly 'org.springframework.boot:spring-boot-devtools' // Hot reload for development
+-    implementation 'jakarta.validation:jakarta.validation-api:3.1.0' // Validation API
+-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0' // OpenAPI documentation UI
+-    implementation 'org.springframework.boot:spring-boot-starter-freemarker' // HTML template engine
+-    implementation 'org.springframework.boot:spring-boot-starter-web' // Spring Web framework
+-    // Validation
+-    implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final' // Hibernate validator for Jakarta Validation
+-    // Converters
+-    implementation 'org.modelmapper:modelmapper:3.2.2' // Object mapping utility
+-    // Other Tools
+-    implementation 'org.springframework.boot:spring-boot-starter-actuator' // Application monitoring and metrics
+-    annotationProcessor 'org.projectlombok:lombok' // Annotation processor for Lombok
+-    compileOnly 'org.projectlombok:lombok' // Lombok for reducing boilerplate code
++    developmentOnly libs.spring.boot.devtools
++    implementation libs.jakarta.validation.api
++    implementation libs.springdoc.openapi.ui
++    implementation libs.spring.boot.starter.freemarker
++    implementation libs.spring.boot.starter.web
++    implementation libs.hibernate.validator
++    implementation libs.modelmapper
++    implementation libs.spring.boot.starter.actuator
++    annotationProcessor libs.lombok
++    compileOnly libs.lombok
+ 
+     // ***** Database *****
+-    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc' // Database connectivity with JDBC
+-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // ORM for relational databases
+-    runtimeOnly 'org.postgresql:postgresql' // Postgres database driver
++    implementation libs.spring.boot.starter.data.jdbc
++    implementation libs.spring.boot.starter.data.jpa
++    runtimeOnly libs.postgresql
+ 
+     // ***** Utility *****
+-    // Metrics
+-    runtimeOnly 'io.micrometer:micrometer-registry-prometheus' // Prometheus metrics exporter
+-    // Docker
+-    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
++    runtimeOnly libs.micrometer.prometheus
+ 
+     // ***** Test *****
+-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2' // Testing framework
+-    testImplementation 'org.springframework.boot:spring-boot-starter-test' // Spring Boot testing utilities
+-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // JUnit Platform launcher
+-    // Groovy
+-    testImplementation 'org.spockframework:spock-core:2.4-M1-groovy-4.0' // Spock testing framework for Groovy
+-
+-    // Local Gradle Projects
+-    implementation project (':delivery-application:infra-database')
+-    implementation project (':delivery-application:catalogue:catalogue-api')
+-    runtimeOnly project (':delivery-application:catalogue:catalogue-runtime')
++    testImplementation libs.junit.jupiter
++    testImplementation libs.spring.boot.starter.test
++    testRuntimeOnly libs.junit.launcher
++    testImplementation libs.spock.core
+ 
++    // ***** Project Modules *****
++    implementation project(':delivery-application:infra-database')
++    implementation project(':delivery-application:catalogue:catalogue-api')
++    runtimeOnly project(':delivery-application:catalogue:catalogue-runtime')
+ }
+ 
+ tasks.named('test') {
+@@ -80,7 +50,6 @@ codenarc {
+     maxPriority3Violations = 0
+ }
+ 
+-
+ println("BUILD SCRIPT: This is executed during the configuration phase")
+ 
+ springBoot {
+diff --git a/delivery-application/catalogue/catalogue-api/build.gradle b/delivery-application/catalogue/catalogue-api/build.gradle
+index d6050e1..6c066c8 100644
+--- a/delivery-application/catalogue/catalogue-api/build.gradle
++++ b/delivery-application/catalogue/catalogue-api/build.gradle
+@@ -1,16 +1,5 @@
+ plugins {
+-    id 'java'
+-    id 'groovy'
+-    id 'io.spring.dependency-management' version '1.1.7'
+-    id 'org.springdoc.openapi-gradle-plugin' version '1.9.0'
+-    id 'checkstyle'
+-    id 'codenarc'
+-}
+-
+-java {
+-    toolchain {
+-        languageVersion = JavaLanguageVersion.of(21)
+-    }
++    id 'delivery.java-conventions'
+ }
+ 
+ configurations {
+@@ -24,12 +13,12 @@ repositories {
+ }
+ 
+ dependencies {
+-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.5.0'
++    implementation libs.springdoc.openapi.ui
+ 
+-    implementation 'jakarta.validation:jakarta.validation-api:3.1.0'
++    implementation libs.jakarta.validation.api
+ 
+-    compileOnly 'org.projectlombok:lombok:1.18.30'
+-    annotationProcessor 'org.projectlombok:lombok:1.18.30'
++    compileOnly libs.lombok
++    annotationProcessor libs.lombok
+ }
+ 
+ // Disable Spring Boot jar creation for API module
+diff --git a/delivery-application/catalogue/catalogue-runtime/build.gradle b/delivery-application/catalogue/catalogue-runtime/build.gradle
+index 23b3a4c..81dfe0b 100644
+--- a/delivery-application/catalogue/catalogue-runtime/build.gradle
++++ b/delivery-application/catalogue/catalogue-runtime/build.gradle
+@@ -1,17 +1,5 @@
+ plugins {
+-    id 'java'
+-    id 'groovy'
+-    id 'org.springframework.boot' version '3.4.3'
+-    id 'io.spring.dependency-management' version '1.1.7'
+-    id 'org.springdoc.openapi-gradle-plugin' version '1.9.0'
+-    id 'checkstyle'
+-    id 'codenarc'
+-}
+-
+-java {
+-    toolchain {
+-        languageVersion = JavaLanguageVersion.of(21)
+-    }
++    id 'delivery.java-conventions'
+ }
+ 
+ configurations {
+@@ -25,34 +13,34 @@ repositories {
+ }
+ 
+ dependencies {
+-    // Spring
+-    implementation 'org.springframework.boot:spring-boot-starter-web'        // For @RestController, @Service, ResponseStatusException
+-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'   // For JPA repository, @Entity
+-    implementation 'org.springframework.boot:spring-boot-starter-validation' // For @Valid on DTOs
++    // ***** Spring *****
++    implementation libs.spring.boot.starter.web         // For @RestController, @Service, ResponseStatusException
++    implementation libs.spring.boot.starter.data.jpa    // For JPA repository, @Entity
++    implementation libs.spring.boot.starter.validation  // For @Valid on DTOs
+ 
+-    // OpenAPI annotations
+-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0' // OpenAPI documentation UI
++    // ***** OpenAPI annotations *****
++    implementation libs.springdoc.openapi.ui            // OpenAPI documentation UI
+ 
+-    // Model mapper
+-    implementation 'org.modelmapper:modelmapper:3.2.2'
++    // ***** Model mapper *****
++    implementation libs.modelmapper                     // Object mapping utility
+ 
+-    // Lombok
+-    compileOnly 'org.projectlombok:lombok:1.18.30'
+-    annotationProcessor 'org.projectlombok:lombok:1.18.30'
++    // ***** Lombok *****
++    compileOnly libs.lombok                             // Lombok for reducing boilerplate code
++    annotationProcessor libs.lombok                     // Annotation processor for Lombok
+ 
+-    // Jakarta annotations
+-    implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
+-    implementation 'jakarta.validation:jakarta.validation-api:3.1.0'
++    // ***** Jakarta annotations *****
++    implementation libs.jakarta.persistence.api         // Jakarta Persistence API
++    implementation libs.jakarta.validation.api          // Jakarta Validation API
+ 
+     // ***** Test *****
+-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2' // Testing framework
+-    testImplementation 'org.springframework.boot:spring-boot-starter-test' // Spring Boot testing utilities
+-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // JUnit Platform launcher
++    testImplementation libs.junit.jupiter               // Testing framework
++    testImplementation libs.spring.boot.starter.test    // Spring Boot testing utilities
++    testRuntimeOnly libs.junit.launcher                 // JUnit Platform launcher
+ 
+-    // Groovy
+-    testImplementation 'org.spockframework:spock-core:2.4-M1-groovy-4.0' // Spock testing framework for Groovy
++    // ***** Groovy *****
++    testImplementation libs.spock.core                  // Spock testing framework for Groovy
+ 
+-    // Internal project dependencies
++    // ***** Internal project dependencies *****
+     implementation project(':delivery-application:catalogue:catalogue-api')
+ }
+ 
+diff --git a/delivery-application/infra-database/build.gradle b/delivery-application/infra-database/build.gradle
+index cb7a29a..40d0f72 100644
+--- a/delivery-application/infra-database/build.gradle
++++ b/delivery-application/infra-database/build.gradle
+@@ -1,11 +1,5 @@
+ plugins {
+-    id 'java'
+-}
+-
+-java {
+-    toolchain {
+-        languageVersion = JavaLanguageVersion.of(21)
+-    }
++    id 'delivery.java-conventions'
+ }
+ 
+ repositories {
+@@ -13,6 +7,6 @@ repositories {
+ }
+ 
+ dependencies {
+-    implementation 'org.flywaydb:flyway-core'
+-    implementation 'org.flywaydb:flyway-database-postgresql'
++    implementation libs.flyway.core
++    implementation libs.flyway.database.postgresql
+ }
+diff --git a/gradle/libs.versions.toml b/gradle/libs.versions.toml
+new file mode 100644
+index 0000000..29707da
+--- /dev/null
++++ b/gradle/libs.versions.toml
+@@ -0,0 +1,52 @@
++[versions]
++java-version = "21"
++spring-boot-version = "3.4.3"
++spring-dependency-management-version = "1.1.7"
++springdoc-openapi-version = "2.6.0"
++openapi-gradle-plugin-version = "1.9.0"
++lombok-version = "1.18.30"
++modelmapper-version = "3.2.2"
++hibernate-validator-version = "8.0.1.Final"
++junit-jupiter-version = "5.9.2"
++spock-version = "2.4-M1-groovy-4.0"
++postgresql-version = "42.6.0" # Example version
++micrometer-prometheus-version = "1.12.0" # Example version
++flyway-core-version = "11.5.0"
++flyway-psql-version = "11.5.0"
++jakarta-validation-api-version = "3.1.0"
++jakarta-persistence-api-version = "3.1.0"
++junit-platform-launcher-version = "1.9.2"
++
++[libraries]
++spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools", version.ref = "spring-boot-version" }
++spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot-version" }
++spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "spring-boot-version" }
++spring-boot-starter-data-jdbc = { module = "org.springframework.boot:spring-boot-starter-data-jdbc", version.ref = "spring-boot-version" }
++spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation", version.ref = "spring-boot-version" }
++spring-boot-starter-freemarker = { module = "org.springframework.boot:spring-boot-starter-freemarker", version.ref = "spring-boot-version" }
++spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "spring-boot-version" }
++spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot-version" }
++
++springdoc-openapi-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc-openapi-version" }
++modelmapper = { module = "org.modelmapper:modelmapper", version.ref = "modelmapper-version" }
++hibernate-validator = { module = "org.hibernate.validator:hibernate-validator", version.ref = "hibernate-validator-version" }
++jakarta-validation-api = { module = "jakarta.validation:jakarta.validation-api", version.ref = "jakarta-validation-api-version" }
++jakarta-persistence-api = { module = "jakarta.persistence:jakarta.persistence-api", version.ref = "jakarta-persistence-api-version" }
++lombok = { module = "org.projectlombok:lombok", version.ref = "lombok-version" }
++postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql-version" }
++
++micrometer-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "micrometer-prometheus-version" }
++
++junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter-version" }
++junit-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit-platform-launcher-version" }
++spock-core = { module = "org.spockframework:spock-core", version.ref = "spock-version" }
++
++flyway-core = {module = 'org.flywaydb:flyway-core', version.ref = "flyway-core-version"}
++flyway-database-postgresql = {module ='org.flywaydb:flyway-database-postgresql', version.ref = "flyway-psql-version"}
++
++[plugins]
++spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot-version" }
++spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management-version" }
++spring-openapi-plugin = { id = "org.springdoc.openapi-gradle-plugin", version.ref = "openapi-gradle-plugin-version" }
++groovy = { id = "groovy" }
++java = { id = "java" }

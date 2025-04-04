@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+    id 'groovy'
+    id 'checkstyle'
+    id 'codenarc'
+    id 'org.springframework.boot'
+}
+
+group = 'nik'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+        vendor = JvmVendorSpec.BELLSOFT
+    }
+}
+
+codenarc {
+    configFile = rootProject.file('config/codenarc/codenarc.groovy')
+    maxPriority1Violations = 0
+    maxPriority2Violations = 0
+    maxPriority3Violations = 0
+}
+
+
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}

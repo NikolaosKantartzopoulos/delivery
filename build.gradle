@@ -1,11 +1,5 @@
-subprojects {
-    apply plugin: 'groovy'
-    apply plugin: 'codenarc'
-
-    codenarc {
-        configFile = rootProject.file('config/codenarc/codenarc.groovy')
-        maxPriority1Violations = 0
-        maxPriority2Violations = 0
-        maxPriority3Violations = 0
-    }
+plugins {
+    alias libs.plugins.spring.dependency.management apply false
+    alias libs.plugins.spring.boot apply false
+    alias libs.plugins.spring.openapi.plugin apply false
 }

@@ -1,17 +1,5 @@
 plugins {
-    id 'java'
-    id 'groovy'
-    id 'org.springframework.boot' version '3.4.3'
-    id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.springdoc.openapi-gradle-plugin' version '1.9.0'
-    id 'checkstyle'
-    id 'codenarc'
-}
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
+    id 'delivery.java-conventions'
 }
 
 configurations {
@@ -25,34 +13,34 @@ repositories {
 }
 
 dependencies {
-    // Spring
-    implementation 'org.springframework.boot:spring-boot-starter-web'        // For @RestController, @Service, ResponseStatusException
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'   // For JPA repository, @Entity
-    implementation 'org.springframework.boot:spring-boot-starter-validation' // For @Valid on DTOs
+    // ***** Spring *****
+    implementation libs.spring.boot.starter.web         // For @RestController, @Service, ResponseStatusException
+    implementation libs.spring.boot.starter.data.jpa    // For JPA repository, @Entity
+    implementation libs.spring.boot.starter.validation  // For @Valid on DTOs
 
-    // OpenAPI annotations
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0' // OpenAPI documentation UI
+    // ***** OpenAPI annotations *****
+    implementation libs.springdoc.openapi.ui            // OpenAPI documentation UI
 
-    // Model mapper
-    implementation 'org.modelmapper:modelmapper:3.2.2'
+    // ***** Model mapper *****
+    implementation libs.modelmapper                     // Object mapping utility
 
-    // Lombok
-    compileOnly 'org.projectlombok:lombok:1.18.30'
-    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    // ***** Lombok *****
+    compileOnly libs.lombok                             // Lombok for reducing boilerplate code
+    annotationProcessor libs.lombok                     // Annotation processor for Lombok
 
-    // Jakarta annotations
-    implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
-    implementation 'jakarta.validation:jakarta.validation-api:3.1.0'
+    // ***** Jakarta annotations *****
+    implementation libs.jakarta.persistence.api         // Jakarta Persistence API
+    implementation libs.jakarta.validation.api          // Jakarta Validation API
 
     // ***** Test *****
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2' // Testing framework
-    testImplementation 'org.springframework.boot:spring-boot-starter-test' // Spring Boot testing utilities
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // JUnit Platform launcher
+    testImplementation libs.junit.jupiter               // Testing framework
+    testImplementation libs.spring.boot.starter.test    // Spring Boot testing utilities
+    testRuntimeOnly libs.junit.launcher                 // JUnit Platform launcher
 
-    // Groovy
-    testImplementation 'org.spockframework:spock-core:2.4-M1-groovy-4.0' // Spock testing framework for Groovy
+    // ***** Groovy *****
+    testImplementation libs.spock.core                  // Spock testing framework for Groovy
 
-    // Internal project dependencies
+    // ***** Internal project dependencies *****
     implementation project(':delivery-application:catalogue:catalogue-api')
 }
 
