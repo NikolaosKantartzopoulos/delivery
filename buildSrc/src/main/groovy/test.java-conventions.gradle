@@ -2,6 +2,7 @@ dependencies {
     testImplementation libs.spring.boot.starter.test
     testRuntimeOnly libs.junit.launcher
     testImplementation libs.spock.core
+    testImplementation libs.mockito.core
 }
 
 tasks.named('test') {
