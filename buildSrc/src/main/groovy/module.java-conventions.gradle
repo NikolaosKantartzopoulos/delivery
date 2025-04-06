@@ -1,0 +1,29 @@
+plugins {
+    id 'test.java-conventions'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+dependencies {
+    // ***** Spring *****
+    implementation libs.springdoc.openapi.ui
+
+    // ***** Model mapper *****
+    implementation libs.modelmapper                     // Object mapping utility
+
+    // ***** Lombok *****
+    compileOnly libs.lombok                             // Lombok for reducing boilerplate code
+    annotationProcessor libs.lombok                     // Annotation processor for Lombok
+
+    // ***** Jakarta annotations *****
+    implementation libs.jakarta.persistence.api         // Jakarta Persistence API
+    implementation libs.jakarta.validation.api          // Jakarta Validation API
+}
+
+bootJar {
+    enabled = false
+}

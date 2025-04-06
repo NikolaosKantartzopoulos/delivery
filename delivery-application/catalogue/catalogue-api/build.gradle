@@ -1,32 +1,4 @@
 plugins {
-    id 'delivery.java-conventions'
-}
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation libs.springdoc.openapi.ui
-
-    implementation libs.jakarta.validation.api
-
-    compileOnly libs.lombok
-    annotationProcessor libs.lombok
-}
-
-// Disable Spring Boot jar creation for API module
-bootJar {
-    enabled = false
-}
-
-// Still allow building a plain JAR for dependency purposes
-jar {
-    enabled = true
+    id 'common.java-conventions'
+    id 'module-api.java-conventions'
 }

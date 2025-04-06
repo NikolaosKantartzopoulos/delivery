@@ -6,12 +6,17 @@ plugins {
     id 'org.springframework.boot'
 }
 
+
+repositories {
+    mavenCentral()
+}
+
 group = 'nik'
 version = '0.0.1-SNAPSHOT'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(libs.versions.java.version.get())
         vendor = JvmVendorSpec.BELLSOFT
     }
 }
@@ -22,8 +27,6 @@ codenarc {
     maxPriority2Violations = 0
     maxPriority3Violations = 0
 }
-
-
 
 configurations {
     compileOnly {

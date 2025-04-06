@@ -1,57 +1,8 @@
 plugins {
-    id 'delivery.java-conventions'
-}
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
-repositories {
-    mavenCentral()
+    id 'common.java-conventions'
+    id 'module-runtime.java-conventions'
 }
 
 dependencies {
-    // ***** Spring *****
-    implementation libs.spring.boot.starter.web         // For @RestController, @Service, ResponseStatusException
-    implementation libs.spring.boot.starter.data.jpa    // For JPA repository, @Entity
-    implementation libs.spring.boot.starter.validation  // For @Valid on DTOs
-
-    // ***** OpenAPI annotations *****
-    implementation libs.springdoc.openapi.ui            // OpenAPI documentation UI
-
-    // ***** Model mapper *****
-    implementation libs.modelmapper                     // Object mapping utility
-
-    // ***** Lombok *****
-    compileOnly libs.lombok                             // Lombok for reducing boilerplate code
-    annotationProcessor libs.lombok                     // Annotation processor for Lombok
-
-    // ***** Jakarta annotations *****
-    implementation libs.jakarta.persistence.api         // Jakarta Persistence API
-    implementation libs.jakarta.validation.api          // Jakarta Validation API
-
-    // ***** Test *****
-    testImplementation libs.junit.jupiter               // Testing framework
-    testImplementation libs.spring.boot.starter.test    // Spring Boot testing utilities
-    testRuntimeOnly libs.junit.launcher                 // JUnit Platform launcher
-
-    // ***** Groovy *****
-    testImplementation libs.spock.core                  // Spock testing framework for Groovy
-
-    // ***** Internal project dependencies *****
     implementation project(':delivery-application:catalogue:catalogue-api')
-}
-
-bootJar {
-    enabled = false
-}
-
-jar {
-    enabled = true
-}
-
-test {
-    useJUnitPlatform()
 }

@@ -1,0 +1,9 @@
+dependencies {
+    testImplementation libs.spring.boot.starter.test
+    testRuntimeOnly libs.junit.launcher
+    testImplementation libs.spock.core
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

@@ -1,20 +1,4 @@
 plugins {
-    id 'delivery.java-conventions'
-}
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation libs.flyway.core
-    implementation libs.flyway.database.postgresql
-}
-
-bootJar {
-    enabled = false
-}
-
-jar {
-    enabled = true
+    id 'common.java-conventions'
+    id 'database.java-conventions'
 }

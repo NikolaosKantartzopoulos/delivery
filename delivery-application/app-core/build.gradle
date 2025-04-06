@@ -1,23 +1,15 @@
 plugins {
-    id 'delivery.java-conventions'
-}
-
-repositories {
-    mavenCentral()
+    id 'common.java-conventions'
+    id 'module.java-conventions'
 }
 
 dependencies {
     // ***** Spring *****
     developmentOnly libs.spring.boot.devtools
-    implementation libs.jakarta.validation.api
-    implementation libs.springdoc.openapi.ui
     implementation libs.spring.boot.starter.freemarker
     implementation libs.spring.boot.starter.web
-    implementation libs.hibernate.validator
-    implementation libs.modelmapper
     implementation libs.spring.boot.starter.actuator
-    annotationProcessor libs.lombok
-    compileOnly libs.lombok
+    implementation libs.hibernate.validator
 
     // ***** Database *****
     implementation libs.spring.boot.starter.data.jdbc
@@ -27,31 +19,11 @@ dependencies {
     // ***** Utility *****
     runtimeOnly libs.micrometer.prometheus
 
-    // ***** Test *****
+    // ***** Tests *****
     testImplementation libs.junit.jupiter
-    testImplementation libs.spring.boot.starter.test
-    testRuntimeOnly libs.junit.launcher
-    testImplementation libs.spock.core
 
     // ***** Project Modules *****
     implementation project(':delivery-application:infra-database')
     implementation project(':delivery-application:catalogue:catalogue-api')
     runtimeOnly project(':delivery-application:catalogue:catalogue-runtime')
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
-}
-
-codenarc {
-    configFile = rootProject.file("config/codenarc/codenarc.groovy")
-    maxPriority1Violations = 0
-    maxPriority2Violations = 0
-    maxPriority3Violations = 0
-}
-
-println("BUILD SCRIPT: This is executed during the configuration phase")
-
-springBoot {
-    mainClass = 'nik.delivery.DeliveryApplication'
 }

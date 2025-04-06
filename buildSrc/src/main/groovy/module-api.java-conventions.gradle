@@ -1,0 +1,7 @@
+plugins {
+    id 'module.java-conventions'
+}
+
+dependencies {
+    implementation libs.springdoc.openapi.ui
+}
