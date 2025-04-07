@@ -39,7 +39,7 @@ tasks.named('bootRun') {
     group = 'Development'
     description = 'Run the Spring Boot application'
     dependsOn 'dockerUp'
-    args = ["--spring.profiles.active=${project.properties['profiles'] ?: 'prod'}"]
+    args = ["--spring.profiles.active=${project.properties['profiles'] ?: 'dev'}"]
 }
 
 tasks.named('test') {
