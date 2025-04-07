@@ -35,11 +35,11 @@ tasks.register('dockerUp', Exec) {
     commandLine 'docker', 'compose', 'up', '-d'
 }
 
-// Make bootRun depend on dockerUp
 tasks.named('bootRun') {
     group = 'Development'
     description = 'Run the Spring Boot application'
     dependsOn 'dockerUp'
+    args = ["--spring.profiles.active=${project.properties['profiles'] ?: 'prod'}"]
 }
 
 tasks.named('test') {
