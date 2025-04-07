@@ -39,6 +39,12 @@ The project is designed with scalability and maintainability in mind using Gradl
 
 ## ▶️ Running the App
 
+>s See gradle tasks in Development group
+
+```bash
+./gradlew tasks --group Development
+```
+
 > Before starting the Spring Boot application, make sure the required services are running via Docker Compose:
 
 ```bash

@@ -14,5 +14,3 @@ include 'delivery-application:app-core'
 include 'delivery-application:infra-database'
 include 'delivery-application:catalogue:catalogue-api'
 include 'delivery-application:catalogue:catalogue-runtime'
-
-println('SETTINGS FILE: This is executed during the initialization phase')

@@ -37,5 +37,17 @@ tasks.register('dockerUp', Exec) {
 
 // Make bootRun depend on dockerUp
 tasks.named('bootRun') {
+    group = 'Development'
+    description = 'Run the Spring Boot application'
     dependsOn 'dockerUp'
+}
+
+tasks.named('test') {
+    group = 'Development'
+    description = 'Run all tests using Spock'
+}
+
+tasks.named('dockerUp') {
+    group = 'Development'
+    description = 'Run docker-compose to start required containers'
 }
