@@ -1,0 +1,24 @@
+tasks.register('createDockerImageTag') {
+    group = 'Versioning'
+    description = 'Creates a Docker image tag based on version, date, and Git commit'
+
+    doLast {
+        // Read values from gradle.properties
+        def majorVersion = project.findProperty('majorVersion') ?: '0'
+        def minorVersion = project.findProperty('minorVersion') ?: '0'
+
+        // Get current date in format yyyy-MM-dd
+        def buildDate = new Date().format("yyyy-MM-dd")
+
+        // Get current git commit hash
+        def gitCommit = 'git rev-parse --short HEAD'.execute(null, rootDir).text.trim()
+
+        // Compose version tag
+        def dockerImageTag = "${buildDate}-${gitCommit}-v${majorVersion}.${minorVersion}"
+
+        println "Docker image tag: $dockerImageTag"
+
+        // Optionally write it to a file or set it on project.ext if needed elsewhere
+        project.ext.generatedDockerTag = dockerImageTag
+    }
+}
