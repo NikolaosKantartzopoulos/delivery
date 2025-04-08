@@ -32,7 +32,7 @@ dependencies {
 tasks.register('dockerUp', Exec) {
     group = 'infrastructure'
     description = 'Runs docker compose up -d'
-    workingDir rootDir  // so it picks up ./docker-compose.yml from the root
+    workingDir "$rootDir/delivery-infra"
     commandLine '/usr/local/bin/docker', 'compose', 'up', '-d'
 }
 

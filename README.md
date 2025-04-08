@@ -39,14 +39,16 @@ The project is designed with scalability and maintainability in mind using Gradl
 
 ## ▶️ Running the App
 
->s See gradle tasks in Development group
+> The docker compose script running before build and bootRun starts a postgres db in port 5555
+
+>See gradle tasks in Development group
 
 ```bash
 ./gradlew tasks --group Development
 ```
 
-> Before starting the Spring Boot application, make sure the required services are running via Docker Compose:
+>Run the app
 
 ```bash
-docker compose up -d
 ./gradlew bootRun
+```
