@@ -32,7 +32,8 @@ dependencies {
 tasks.register('dockerUp', Exec) {
     group = 'infrastructure'
     description = 'Runs docker compose up -d'
-    commandLine 'docker', 'compose', 'up', '-d'
+    workingDir rootDir  // so it picks up ./docker-compose.yml from the root
+    commandLine '/usr/local/bin/docker', 'compose', 'up', '-d'
 }
 
 tasks.named('bootRun') {
@@ -45,6 +46,7 @@ tasks.named('bootRun') {
 tasks.named('test') {
     group = 'Development'
     description = 'Run all tests using Spock'
+    dependsOn 'dockerUp'
 }
 
 tasks.named('dockerUp') {
