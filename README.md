@@ -1,6 +1,6 @@
 # 🛵 Delivery Application
 
-This is a modular Spring Boot application for managing a food delivery catalogue and related services. 
+This is a modular Spring Boot application for managing a food delivery catalogue and related services.
 
 The project is designed with scalability and maintainability in mind using Gradle convention plugins and a multi-module setup.
 
@@ -41,14 +41,41 @@ The project is designed with scalability and maintainability in mind using Gradl
 
 > The docker compose script running before build and bootRun starts a postgres db in port 5555
 
->See gradle tasks in Development group
+> See gradle tasks in Development group
 
 ```bash
 ./gradlew tasks --group Development
 ```
 
->Run the app
+> Run the app
 
 ```bash
 ./gradlew bootRun
 ```
+
+---
+
+## 📦 Building & Deploying Docker Images
+
+### 🔁 Push versioned and `dev01` Docker images to Docker Hub (Mac)
+```bash
+./gradlew :delivery-infra:delivery-docker:dockerDeployDev01
+```
+This will:
+- Build and tag a versioned Docker image (e.g., `:2025-04-09-09-40-68a0a11-v1.0`)
+- Tag the image as `:dev01`
+- Push both tags to Docker Hub
+
+### 🐧 Pull and run on your Ubuntu server (dev01)
+```bash
+# SSH into server
+ssh nik@192.168.1.99
+
+# Pull the dev01 image
+docker pull nkantartzopoulos/delivery-app:dev01
+
+# Run the dev01 stack
+docker compose -f /home/nik/code/development/delivery-app/docker/docker-compose.dev01.yml up -d
+```
+
+> 💡 Use `docker compose ... down` to stop the containers

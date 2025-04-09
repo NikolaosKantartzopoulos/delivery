@@ -1,0 +1,152 @@
+plugins {
+    id 'base'
+}
+
+apply from: "${rootDir}/buildSrc/src/main/groovy/versioning.gradle"
+
+def dockerImageBase = "nkantartzopoulos/delivery-app"
+def dockerBuildDir = layout.buildDirectory.dir("docker").get().asFile
+
+tasks.register('prepareDockerContext') {
+    group = 'Docker'
+    description = 'Copies Dockerfile and JAR into build/docker folder'
+    dependsOn ':delivery-application:app-core:bootJar'
+
+    doLast {
+        def bootJar = project(":delivery-application:app-core").tasks.named("bootJar").get().archiveFile.get().asFile
+
+        if (!bootJar.exists()) {
+            throw new GradleException("Spring Boot JAR not found at ${bootJar}")
+        }
+
+        dockerBuildDir.mkdirs()
+
+        copy {
+            from "${rootDir}/delivery-infra/delivery-docker"
+            include 'Dockerfile'
+            into dockerBuildDir
+        }
+
+        copy {
+            from bootJar.getParentFile()
+            include bootJar.name
+            into dockerBuildDir
+            rename { "app.jar" }
+        }
+    }
+}
+
+tasks.register('dockerBuildAppCore', Exec) {
+    group = 'Docker'
+    description = 'Builds Docker image for app-core with versioned tag'
+    dependsOn 'prepareDockerContext', 'createDockerImageTag'
+
+    doFirst {
+        if (!project.ext.has('generatedDockerTag')) {
+            throw new GradleException("generatedDockerTag not found.")
+        }
+
+        commandLine '/usr/local/bin/docker',
+                'buildx', 'build',
+                '--platform', 'linux/amd64',
+                '--build-arg', "JAR_FILE=app.jar",
+                '-t', "${dockerImageBase}:${project.ext.generatedDockerTag}",
+                '--load',
+                '.'
+
+        project.ext.builtDockerImage = "${dockerImageBase}:${project.ext.generatedDockerTag}"
+    }
+
+    workingDir = dockerBuildDir
+}
+
+tasks.register('dockerTagAsDev01', Exec) {
+    group = 'Docker'
+    description = 'Tags the latest built Docker image as dev01'
+    dependsOn 'dockerBuildAppCore'
+
+    doFirst {
+        if (!project.ext.has('builtDockerImage')) {
+            throw new GradleException("builtDockerImage not found. Run dockerBuildAppCore first.")
+        }
+
+        def dev01Tag = "${dockerImageBase}:dev01"
+        println "Tagging ${project.ext.builtDockerImage} as ${dev01Tag}"
+
+        commandLine 'docker', 'tag', project.ext.builtDockerImage, dev01Tag
+        project.ext.dev01DockerTag = dev01Tag
+    }
+}
+
+tasks.register('dockerPushAppCore', Exec) {
+    group = 'Docker'
+    description = 'Pushes versioned Docker image for app-core'
+    dependsOn 'dockerBuildAppCore'
+
+    doFirst {
+        if (!project.ext.has('builtDockerImage')) {
+            throw new GradleException("builtDockerImage not found. Run dockerBuildAppCore first.")
+        }
+
+        commandLine 'docker', 'push', project.ext.builtDockerImage
+    }
+}
+
+tasks.register('dockerPushDev01', Exec) {
+    group = 'Docker'
+    description = 'Pushes dev01 Docker tag to Docker Hub'
+    dependsOn 'dockerTagAsDev01'
+
+    doFirst {
+        if (!project.ext.has('dev01DockerTag')) {
+            throw new GradleException("dev01DockerTag not set. Run dockerTagAsDev01 first.")
+        }
+
+        println "Pushing Docker image: ${project.ext.dev01DockerTag}"
+        commandLine 'docker', 'push', project.ext.dev01DockerTag
+    }
+}
+
+/*
+ * --------------------------------------------------------------------
+ * 💻 LOCAL (Mac) – Build, Tag, and Push Docker Image for dev01
+ * --------------------------------------------------------------------
+ * 1. Run this from the project root to build and push the image:
+ *
+ *    ./gradlew :delivery-infra:delivery-docker:dockerDeployDev01
+ *
+ *    This will:
+ *      - Create a versioned Docker image (e.g., :2025-04-09-09-40-68a0a11-v1.0)
+ *      - Tag that image also as :dev01
+ *      - Push both versioned and :dev01 tags to Docker Hub
+ *
+ *
+ * --------------------------------------------------------------------
+ * 🐧 REMOTE (Ubuntu server) – Pull and Run dev01 Image
+ * --------------------------------------------------------------------
+ * 1. SSH into the server:
+ *
+ *    ssh nik@192.168.1.99
+ *
+ * 2. Pull the latest dev01-tagged image:
+ *
+ *    docker pull nkantartzopoulos/delivery-app:dev01
+ *
+ * 3. Start (or restart) the dev01 environment:
+ *
+ *    docker compose -f /home/nik/code/development/delivery-app/docker/docker-compose.dev01.yml up -d
+ *
+ *    This will:
+ *      - Spin up or recreate the Postgres and delivery-app containers
+ *      - Use the :dev01 image tag defined in the compose file
+ *
+ * 4. (Optional) Stop it later with:
+ *
+ *    docker compose -f /home/nik/code/development/delivery-app/docker/docker-compose.dev01.yml down
+ *
+ */
+tasks.register('dockerDeployDev01') {
+    group = 'Docker'
+    description = 'Build, tag as dev01, and push Docker image for dev01'
+    dependsOn 'dockerPushDev01'
+}

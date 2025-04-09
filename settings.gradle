@@ -14,3 +14,6 @@ include 'delivery-application:app-core'
 include 'delivery-application:infra-database'
 include 'delivery-application:catalogue:catalogue-api'
 include 'delivery-application:catalogue:catalogue-runtime'
+
+include ':delivery-infra:delivery-docker'
+project(':delivery-infra:delivery-docker').projectDir = file('delivery-infra/delivery-docker')

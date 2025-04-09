@@ -8,7 +8,7 @@ tasks.register('createDockerImageTag') {
         def minorVersion = project.findProperty('minorVersion') ?: '0'
 
         // Get current date in format yyyy-MM-dd
-        def buildDate = new Date().format("yyyy-MM-dd")
+        def buildDate = new Date().format("yyyy-MM-dd-HH-mm")
 
         // Get current git commit hash
         def gitCommit = 'git rev-parse --short HEAD'.execute(null, rootDir).text.trim()

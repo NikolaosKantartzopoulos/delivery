@@ -53,3 +53,11 @@ tasks.named('dockerUp') {
     group = 'Development'
     description = 'Run docker-compose to start required containers'
 }
+
+tasks.named('bootJar') {
+    enabled = true
+}
+
+tasks.named('jar') {
+    enabled = false
+}
