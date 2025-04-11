@@ -33,7 +33,7 @@ tasks.register('dockerUp', Exec) {
     group = 'infrastructure'
     description = 'Runs docker compose up -d'
     workingDir "$rootDir/delivery-infra"
-    commandLine '/usr/local/bin/docker', 'compose', 'up', '-d'
+    commandLine 'docker', 'compose', 'up', '-d'
 }
 
 tasks.named('bootRun') {
