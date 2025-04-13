@@ -1,0 +1,17 @@
+tasks.register("dumpGradleFiles") {
+    group = "diagnostics"
+    description = "Collects all *.gradle files under the project directory and writes their paths and contents to ./gradle.details"
+
+    doLast {
+        def output = new File("$rootDir/gradle.details")
+        output.text = ""
+
+        rootDir.eachFileRecurse { file ->
+            if (file.name.endsWith(".gradle") && file.isFile()) {
+                output << ">>> ${file.absolutePath - rootDir.absolutePath}\n"
+                output << file.text
+                output << "\n\n"
+            }
+        }
+    }
+}
