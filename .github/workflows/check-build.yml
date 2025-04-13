@@ -5,8 +5,12 @@ on:
     branches: [ main ]
 
 jobs:
+  check-commit-message:
+    uses: ./.github/workflows/check-commit-message.yml
+
   build:
     runs-on: ubuntu-latest
+    needs: check-commit-message
 
     steps:
       - name: Checkout sources

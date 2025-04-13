@@ -1,0 +1,14 @@
+name: Check Commit Message
+
+on:
+  workflow_call:
+
+jobs:
+  check-commit-message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Commit Type
+        uses: gsactions/commit-message-checker@v2
+        with:
+          pattern: '^(Github|Docker|Gradle|Spring|Pitstop|Fix|Tests):\s.*'
+          error: "❌ Invalid format: commit message must start with one of [Github, Docker, Gradle, Spring, Pitstop, Fix, Tests], followed by a colon and a space (e.g., Gradle: Update build logic)."
