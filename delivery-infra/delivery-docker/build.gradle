@@ -150,3 +150,36 @@ tasks.register('dockerDeployDev01') {
     description = 'Build, tag as dev01, and push Docker image for dev01'
     dependsOn 'dockerPushDev01'
 }
+
+tasks.register('dockerTagAsLatest', Exec) {
+    group = 'Docker'
+    description = 'Tags the latest built Docker image as latest'
+    dependsOn 'dockerBuildAppCore'
+
+    doFirst {
+        if (!project.ext.has('builtDockerImage')) {
+            throw new GradleException("builtDockerImage not found. Run dockerBuildAppCore first.")
+        }
+
+        def latestTag = "${dockerImageBase}:latest"
+        println "Tagging ${project.ext.builtDockerImage} as ${latestTag}"
+
+        commandLine 'docker', 'tag', project.ext.builtDockerImage, latestTag
+        project.ext.latestDockerTag = latestTag
+    }
+}
+
+tasks.register('dockerPushLatest', Exec) {
+    group = 'Docker'
+    description = 'Pushes latest Docker tag to Docker Hub'
+    dependsOn 'dockerTagAsLatest'
+
+    doFirst {
+        if (!project.ext.has('latestDockerTag')) {
+            throw new GradleException("latestDockerTag not set. Run dockerTagAsLatest first.")
+        }
+
+        println "Pushing Docker image: ${project.ext.latestDockerTag}"
+        commandLine 'docker', 'push', project.ext.latestDockerTag
+    }
+}

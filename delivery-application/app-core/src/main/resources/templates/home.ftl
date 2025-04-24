@@ -11,5 +11,7 @@
     <#else>
         <p>Using <code>application.properties</code></p>
     </#if>
+    <p>Hostname: ${hostname}</p>
+    <p>IP: ${ip}</p>
 </body>
 </html>

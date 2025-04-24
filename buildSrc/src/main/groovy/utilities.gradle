@@ -15,3 +15,28 @@ tasks.register("dumpGradleFiles") {
         }
     }
 }
+
+tasks.register("dumpHelmFiles") {
+    group = "diagnostics"
+    description = "Collects all files under helm/ and writes their paths and contents to helm.details"
+
+    doLast {
+        def output = new File("$rootDir/helm.details")
+        output.text = "" // clear previous output
+
+        def helmDir = new File("$rootDir/delivery-infra/helm")
+        if (!helmDir.exists()) {
+            throw new GradleException("Helm directory not found at: $helmDir")
+        }
+
+        helmDir.eachFileRecurse { file ->
+            if (file.isFile()) {
+                output << ">>> ${file.absolutePath - rootDir.absolutePath}\n"
+                output << file.text
+                output << "\n\n"
+            }
+        }
+
+        println "Helm details written to: ${output.absolutePath}"
+    }
+}
