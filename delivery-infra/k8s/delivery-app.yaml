@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: delivery-app-backend
-          image: nkantartzopoulos/delivery-app:latest
+          image: nkantartzopoulos/delivery-app-backend:latest
           ports:
             - containerPort: 8080
           env:

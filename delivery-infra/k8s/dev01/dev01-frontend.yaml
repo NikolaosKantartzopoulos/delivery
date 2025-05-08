@@ -1,0 +1,42 @@
+# Frontend Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: delivery-frontend-service
+  namespace: dev01
+spec:
+  type: NodePort
+  selector:
+    app: delivery-app-frontend
+  ports:
+    - port: 80
+      targetPort: 7900
+      nodePort: 30081
+---
+# Frontend Deployment (Vite)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: delivery-app-frontend
+  namespace: dev01
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: delivery-app-frontend
+  template:
+    metadata:
+      labels:
+        app: delivery-app-frontend
+    spec:
+      containers:
+        - name: delivery-app-frontend
+          image: nkantartzopoulos/delivery-app-frontend:latest
+          ports:
+            - containerPort: 7900
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 7900
+            initialDelaySeconds: 5
+            periodSeconds: 5
