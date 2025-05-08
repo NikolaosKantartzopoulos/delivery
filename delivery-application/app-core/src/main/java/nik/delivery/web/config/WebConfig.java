@@ -24,8 +24,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/api/**")
             .allowedOrigins(
                 "https://dev01delivery.rtlan.gr",
-                "http://localhost:3000",
-                "http://127.0.0.1:3000"
+                "http://localhost:7900",
+                "http://127.0.0.1:7900"
             )
             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
             .allowedHeaders("*")
