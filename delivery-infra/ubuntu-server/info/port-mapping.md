@@ -89,8 +89,8 @@ These entries forward traffic to the **backend (Spring Boot API)** services:
 | 8181                         | 30181         | be-dev01   | Backend Dev 01 |
 | 8182                         | 30182         | be-dev02   | Backend Dev 02 |
 | 8183                         | 30183         | be-dev03   | Backend Dev 03 |
-| 8893                         | 30191         | be-sit04   | Backend SIT 04 |
-| 9801                         | 30981         | be-prod    | Backend Prod   |
+| 8891                         | 30191         | be-sit04   | Backend SIT 04 |
+| 9051                         | 30951         | be-prod    | Backend Prod   |
 
 These typically expose the Spring Boot app on port `8080` within the container, routed externally via NodePort services.
 
