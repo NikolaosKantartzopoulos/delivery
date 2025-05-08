@@ -1,0 +1,53 @@
+# PostgreSQL Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: delivery-app-postgres
+  namespace: dev01
+spec:
+  selector:
+    app: delivery-app-postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
+---
+# PostgreSQL StatefulSet
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: delivery-app-postgres
+  namespace: dev01
+spec:
+  serviceName: delivery-app-postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app: delivery-app-postgres
+  template:
+    metadata:
+      labels:
+        app: delivery-app-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:17
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: "delivery"
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              value: "postgres"
+          volumeMounts:
+            - name: k8s-delivery-postgres-storage
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: k8s-delivery-postgres-storage
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi

@@ -17,7 +17,7 @@ services:
       retries: 5
 
   delivery-app:
-    image: nkantartzopoulos/delivery-app:dev01
+    image: nkantartzopoulos/delivery-app-backend:dev01
     container_name: delivery-app-dev01
     depends_on:
       - postgres-db

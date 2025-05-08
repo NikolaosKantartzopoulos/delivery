@@ -1,0 +1,58 @@
+# Backend internal service (ClusterIP)
+apiVersion: v1
+kind: Service
+metadata:
+  name: delivery-backend-service
+  namespace: dev01
+spec:
+  type: NodePort
+  selector:
+    app: delivery-app-backend
+  ports:
+    - port: 8881
+      targetPort: 8080
+      nodePort: 30181
+---
+# Backend Deployment (Spring Boot)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: delivery-app-backend
+  namespace: dev01
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: delivery-app-backend
+  template:
+    metadata:
+      labels:
+        app: delivery-app-backend
+    spec:
+      containers:
+        - name: delivery-app-backend
+          image: nkantartzopoulos/delivery-app-backend:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "prod"
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:postgresql://delivery-app-postgres:5432/delivery"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "postgres"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: "postgres"
+            - name: SPRING_FLYWAY_SCHEMAS
+              value: "delivery"
+            - name: SPRING_FLYWAY_DEFAULT_SCHEMA
+              value: "delivery"
+            - name: SPRING_JPA_PROPERTIES_HIBERNATE_DEFAULT_SCHEMA
+              value: "delivery"
+            - name: ENV_COMPANY_NAME
+              value: "Kubernetes company name"
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5

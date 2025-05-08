@@ -4,7 +4,7 @@ plugins {
 
 apply from: "${rootDir}/buildSrc/src/main/groovy/versioning.gradle"
 
-def dockerImageBase = "nkantartzopoulos/delivery-app"
+def dockerImageBase = "nkantartzopoulos/delivery-app-backend"
 def dockerBuildDir = layout.buildDirectory.dir("docker").get().asFile
 
 tasks.register('prepareDockerContext') {
@@ -12,8 +12,10 @@ tasks.register('prepareDockerContext') {
     description = 'Copies Dockerfile and JAR into build/docker folder'
     dependsOn ':delivery-application:app-core:bootJar'
 
+    def bootJarProvider = project(":delivery-application:app-core").tasks.named("bootJar").flatMap { it.archiveFile }
+
     doLast {
-        def bootJar = project(":delivery-application:app-core").tasks.named("bootJar").get().archiveFile.get().asFile
+        def bootJar = bootJarProvider.get().asFile
 
         if (!bootJar.exists()) {
             throw new GradleException("Spring Boot JAR not found at ${bootJar}")
@@ -171,15 +173,18 @@ tasks.register('dockerTagAsLatest', Exec) {
 
 tasks.register('dockerPushLatest', Exec) {
     group = 'Docker'
-    description = 'Pushes latest Docker tag to Docker Hub'
-    dependsOn 'dockerTagAsLatest'
+    description = 'Builds and pushes project with latest tag to Docker Hub'
+    dependsOn 'prepareDockerContext'
 
     doFirst {
-        if (!project.ext.has('latestDockerTag')) {
-            throw new GradleException("latestDockerTag not set. Run dockerTagAsLatest first.")
-        }
-
-        println "Pushing Docker image: ${project.ext.latestDockerTag}"
-        commandLine 'docker', 'push', project.ext.latestDockerTag
+        commandLine '/usr/local/bin/docker',
+                'buildx', 'build',
+                '--platform', 'linux/amd64',
+                '--build-arg', "JAR_FILE=app.jar",
+                '-t', "${dockerImageBase}:latest",
+                '--push',
+                '.'
     }
+
+    workingDir = dockerBuildDir
 }
