@@ -13,8 +13,8 @@ FORWARDS=(
   "8181:30181:be-dev01"
   "8182:30182:be-dev02"
   "8183:30183:be-dev03"
-  "8893:30191:be-sit04"
-  "9801:30981:be-prod"
+  "8891:30191:be-sit04"
+  "9051:30951:be-prod"
 )
 
 # K8s node IP to forward to
