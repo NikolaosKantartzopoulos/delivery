@@ -1,3 +1,4 @@
+---
 # Frontend Service
 apiVersion: v1
 kind: Service
@@ -11,7 +12,7 @@ spec:
   ports:
     - port: 80
       targetPort: 7900
-      nodePort: 30081
+      nodePort: 30101
 ---
 # Frontend Deployment (Vite)
 apiVersion: apps/v1

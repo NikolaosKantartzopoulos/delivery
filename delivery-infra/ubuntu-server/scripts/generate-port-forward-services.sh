@@ -3,18 +3,32 @@
 # Define your port mappings here: local_port:remote_port:name
 FORWARDS=(
   # 🌐 Frontend
-  "8081:30081:fe-dev01"
-  "8082:30082:fe-dev02"
-  "8083:30083:fe-dev03"
-  "8091:30091:fe-sit01"
-  "9001:30901:fe-prod01"
+  "30101:30101:fe-dev01"
+  "30102:30102:fe-dev02"
+  "30103:30103:fe-dev03"
+  "30111:30111:fe-sit01"
+  "30121:30121:fe-prod01"
 
   # ⚙️ Backend / API
-  "8181:30181:be-dev01"
-  "8182:30182:be-dev02"
-  "8183:30183:be-dev03"
-  "8891:30191:be-sit04"
-  "9051:30951:be-prod"
+  "30201:30201:be-dev01"
+  "30202:30202:be-dev02"
+  "30203:30203:be-dev03"
+  "30211:30211:be-sit04"
+  "30221:30221:be-prod"
+
+  # 📊 Prometheus
+  "30301:30301:prometheus-dev01"
+  "30302:30302:prometheus-dev02"
+  "30303:30303:prometheus-dev03"
+  "30311:30311:prometheus-sit01"
+  "30321:30321:prometheus-prod"
+
+  # 📊 Grafana Dashboards
+  "30401:30401:prometheus-dev01"
+  "30402:30402:prometheus-dev02"
+  "30403:30403:prometheus-dev03"
+  "30411:30411:prometheus-sit01"
+  "30421:30421:prometheus-prod"
 )
 
 # K8s node IP to forward to

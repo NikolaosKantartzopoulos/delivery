@@ -23,7 +23,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
             .allowedOrigins(
-                "https://dev01delivery.rtlan.gr",
+                "https://delivery-dev01.rtlan.gr",
                 "http://localhost:7900",
                 "http://127.0.0.1:7900"
             )

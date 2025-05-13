@@ -3,7 +3,7 @@ services:
     image: prom/prometheus
     container_name: prometheus
     ports:
-      - "9090:9090"
+      - "7902:9090"
     volumes:
       - ../config/prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
@@ -15,7 +15,7 @@ services:
     image: grafana/grafana
     container_name: grafana
     ports:
-      - "3000:3000"
+      - "7903:3000"
     networks:
       - monitoring
     environment:
@@ -33,7 +33,7 @@ services:
     volumes:
       - deliveryPSQL:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "7904:5432"
     networks:
       - monitoring
     healthcheck:

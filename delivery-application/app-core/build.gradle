@@ -47,6 +47,7 @@ tasks.named('test') {
     group = 'Development'
     description = 'Run all tests using Spock'
     dependsOn 'dockerUp'
+    systemProperty "spring.profiles.active", "dev"
 }
 
 tasks.named('dockerUp') {
