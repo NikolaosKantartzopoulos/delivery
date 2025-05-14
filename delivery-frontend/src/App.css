@@ -104,6 +104,12 @@ th {
 td:last-child {
     width: 120px;
 }
+.delete-div{
+    display: flex;
+    gap: 1rem;
+    align-content: center;
+    align-items: center;
+}
 
 
 @media (max-width: 600px) {

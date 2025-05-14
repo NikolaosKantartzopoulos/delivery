@@ -24,11 +24,11 @@ FORWARDS=(
   "30321:30321:prometheus-prod"
 
   # 📊 Grafana Dashboards
-  "30401:30401:prometheus-dev01"
-  "30402:30402:prometheus-dev02"
-  "30403:30403:prometheus-dev03"
-  "30411:30411:prometheus-sit01"
-  "30421:30421:prometheus-prod"
+  "30401:30401:grafana-dev01"
+  "30402:30402:grafana-dev02"
+  "30403:30403:grafana-dev03"
+  "30411:30411:grafana-sit01"
+  "30421:30421:grafana-prod"
 )
 
 # K8s node IP to forward to

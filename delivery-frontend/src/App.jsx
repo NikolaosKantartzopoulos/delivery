@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
+import DashboardLinks from './DashboardLinks.jsx';
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 const API_ENV = import.meta.env.VITE_APP_ENV;
@@ -84,13 +85,15 @@ function App() {
                         </div>
                 )}
                 <div>
-                    <h1>Create Food Category: {API_ENV}</h1>
-                    <div>
-                        <p>API_BASE: {API_BASE}</p>
-                        <p>API_ENV : {API_ENV}</p>
+                    <div className="delete-div">
+                        <h1>Food Categories App</h1>
+                        <button onClick={handleDeleteAll}>
+                            🗑️ Delete All
+                        </button>
                     </div>
+                    <DashboardLinks/>
                     <div className="formDiv">
-                        <label>Category Name:</label>
+                        <label>Create Category</label>
                         <form onSubmit={handleSubmit}>
                             <input
                                     type="text"
@@ -108,10 +111,6 @@ function App() {
                             </div>
                     )}
 
-                    <h2>📋 Food Categories</h2>
-                    <button onClick={handleDeleteAll} style={{marginBottom: '1rem'}}>
-                        🗑️ Delete All Categories
-                    </button>
                     {categories.length === 0 ? (
                             <p>No categories found.</p>
                     ) : (
@@ -140,7 +139,8 @@ function App() {
                     )}
                 </div>
             </div>
-    );
+    )
+            ;
 }
 
 export default App;
